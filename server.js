@@ -17,7 +17,7 @@ const MIME_TYPES = {
   '.ico': 'image/x-icon'
 };
 
-const server = http.createServer((req, res) => {
+const requestHandler = (req, res) => {
   // Translate URL path to local file path
   let filePath = req.url === '/' ? './index.html' : '.' + req.url;
   
@@ -41,11 +41,17 @@ const server = http.createServer((req, res) => {
       res.end(content, 'utf-8');
     }
   });
-});
+};
 
-server.listen(PORT, () => {
-  console.log(`==================================================`);
-  console.log(`Acuity Proctor server running at:`);
-  console.log(`http://localhost:${PORT}/`);
-  console.log(`==================================================`);
-});
+if (require.main === module) {
+  const server = http.createServer(requestHandler);
+  server.listen(PORT, () => {
+    console.log(`==================================================`);
+    console.log(`Acuity Proctor server running at:`);
+    console.log(`http://localhost:${PORT}/`);
+    console.log(`==================================================`);
+  });
+}
+
+module.exports = requestHandler;
+
